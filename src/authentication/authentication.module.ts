@@ -5,7 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthenticationService } from './authentication.service';
 import { AuthenticationController } from './authentication.controller';
 import { JwtStrategy } from './jwt.strategy';
-import { UserModule } from '../user/user.module';
+import { UserModule } from '../user/user.module';  
 
 @Module({
   imports: [
@@ -17,7 +17,7 @@ import { UserModule } from '../user/user.module';
       useFactory: async (configService: ConfigService) => ({
         // Usa un valor por defecto si JWT_SECRET no está definido
         secret: configService.get<string>('JWT_SECRET') || 'fallback_secret',
-        signOptions: { expiresIn: '1d' },
+        signOptions: { expiresIn: configService.get('JWT_EXPIRES_IN') || '1d' },
       }),
     }),
   ],

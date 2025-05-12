@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
+import { UnauthorizedException } from '@nestjs/common';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -9,12 +10,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      //fallback_secret está por si en .env no esta definida la clave secreta, así no retorna un undefined.
-      secretOrKey: configService.get<string>('JWT_SECRET') || 'fallback_secret', 
+      secretOrKey: configService.get<string>('JWT_SECRET') || 'fallback_secret',
     });
   }
 
   async validate(payload: any) {
+    if (!payload.sub || !payload.email) {
+      throw new UnauthorizedException('Payload del token inválido');
+    }
     return { userId: payload.sub, email: payload.email };
   }
 }

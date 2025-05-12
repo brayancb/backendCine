@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { RegisterDTO } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -14,6 +14,9 @@ export class AuthenticationController {
 
   @Post('login')
   async login(@Body() loginDto: LoginDto) {
+    if (!loginDto || !loginDto.email || !loginDto.password) {
+      throw new BadRequestException('Email y contraseña son requeridos');
+    }
     return this.authenticationService.login(loginDto);
   }
 }

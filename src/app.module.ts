@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import configuration from './configuration/configuration';
+import { AuthenticationModule } from './authentication/authentication.module';
+
 
 @Module({
   imports: [
@@ -20,6 +22,7 @@ import configuration from './configuration/configuration';
         uri: `mongodb://${ConfigService.get('mongo.user')}:${ConfigService.get('mongo.password')}@${ConfigService.get('mongo.host')}:${ConfigService.get('mongo.port')}/${ConfigService.get('mongo.database')}?authSource=admin`,
       }),
     }),
+    AuthenticationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
