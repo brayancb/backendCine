@@ -13,8 +13,35 @@ export class AuthenticationService {
     private readonly jwtService: JwtService,
   ) {}
 
-  create(RegisterDTO: RegisterDTO) {
-    return 'This action adds a new authentication';
+  async create(registerDTO: RegisterDTO) {
+    // Verifica si el usuario ya existe por email
+    const existingUser = await this.userService.findByEmail(registerDTO.email);
+    if (existingUser) {
+      throw new BadRequestException('El correo ya está registrado');
+    }
+
+    // Hashea la contraseña antes de guardar
+    const hashedPassword = await bcrypt.hash(registerDTO.password, 10);
+
+    // Crea el usuario usando el UserService
+    const user = await this.userService.create({
+      ...registerDTO,
+      password: hashedPassword,
+    });
+
+    // Opcional: genera un token JWT al registrar
+    const payload = { sub: user._id, email: user.email };
+    const token = this.jwtService.sign(payload);
+
+    return {
+      message: 'Usuario registrado exitosamente',
+      access_token: token,
+      user: {
+        _id: user._id,
+        email: user.email,
+        username: user.username,
+      },
+    };
   }
   
   async login(loginDto: LoginDto) {
