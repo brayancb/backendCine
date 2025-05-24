@@ -55,4 +55,9 @@ export class MovieService {
   async findInCartelera(): Promise<Movie[]> {
     return this.movieModel.find({ inCartelera: true }).exec();
   }
+
+  async getCartelera(): Promise<Movie[]> {
+    return this.movieModel.find({inCartelera:true}).select('title image').exec();
+
+  }
 }

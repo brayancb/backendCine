@@ -3,6 +3,7 @@ import { Document } from 'mongoose';
 
 @Schema()
 export class Movie extends Document {
+
   @Prop({ required: true })
   title: string;
 
