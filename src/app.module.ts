@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import configuration from './configuration/configuration';
 import { AuthenticationModule } from './authentication/authentication.module';
+import { MovieModule } from './movie/movie.module';
 
 
 @Module({
@@ -23,6 +24,7 @@ import { AuthenticationModule } from './authentication/authentication.module';
       }),
     }),
     AuthenticationModule,
+    MovieModule,
   ],
   controllers: [AppController],
   providers: [AppService],
