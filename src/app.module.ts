@@ -6,7 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import configuration from './configuration/configuration';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { MovieModule } from './movie/movie.module';
-
+import { RoomModule } from './room/room.module';
 
 @Module({
   imports: [
@@ -25,6 +25,7 @@ import { MovieModule } from './movie/movie.module';
     }),
     AuthenticationModule,
     MovieModule,
+    RoomModule,
   ],
   controllers: [AppController],
   providers: [AppService],
