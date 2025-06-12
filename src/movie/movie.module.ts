@@ -5,7 +5,6 @@ import { MovieService } from './movie.service';
 import { MovieController } from './movie.controller';
 import { CloudinaryModule } from 'src/cloudinary/cloud.module';
 
-
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Movie.name, schema: MovieSchema }]),
@@ -13,5 +12,6 @@ import { CloudinaryModule } from 'src/cloudinary/cloud.module';
   ],
   controllers: [MovieController],
   providers: [MovieService],
+  exports: [MovieService],
 })
 export class MovieModule {}

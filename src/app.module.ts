@@ -7,6 +7,7 @@ import configuration from './configuration/configuration';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { MovieModule } from './movie/movie.module';
 import { RoomModule } from './room/room.module';
+import { ShowtimeModule } from './showtime/showtime.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { RoomModule } from './room/room.module';
     AuthenticationModule,
     MovieModule,
     RoomModule,
+    ShowtimeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
