@@ -7,6 +7,8 @@ import { RoomService } from 'src/room/room.service';
 import * as moment from 'moment';
 import { MovieService } from 'src/movie/movie.service';
 import { Movie } from 'src/schemas/movie.schema';
+import { Seat } from '../schemas/seat.schema';
+
 
 @Injectable()
 export class ShowtimeService {
@@ -185,4 +187,30 @@ export class ShowtimeService {
 
     return fechasUnicas.sort();
   }
+
+  async getAvailableSeatsByShowtimeId(showtimeId: string): Promise<Seat[][]> {
+  if (!Types.ObjectId.isValid(showtimeId)) {
+    throw new NotFoundException('ID de función inválido');
+  }
+
+  const showtime = await this.showtimeModel.findById(showtimeId).exec();
+
+  if (!showtime) {
+    throw new NotFoundException('Función no encontrada');
+  }
+
+  const room = await this.roomService.findById(showtime.room.toString());
+
+  if (!room) {
+    throw new NotFoundException('Sala asociada no encontrada');
+  }
+
+  // Filtrar solo los asientos no ocupados
+  const availableSeats: Seat[][] = room.seats.map((row) =>
+    row.map((seat) => ({row: seat.row, column: seat.column, occupied: seat.occupied,}))
+  );
+
+  return availableSeats;
+}
+
 }

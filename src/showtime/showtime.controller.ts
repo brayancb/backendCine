@@ -38,4 +38,10 @@ export class ShowtimeController {
   getAvailableDates(@Param('movieId') movieId: string): Promise<string[]> {
     return this.showtimeService.getAvailableDatesByMovie(movieId);
   }
+
+  @Get(':id/available-seats')
+  getAvailableSeats(@Param('id') id: string) {
+    return this.showtimeService.getAvailableSeatsByShowtimeId(id);
+}
+
 }
