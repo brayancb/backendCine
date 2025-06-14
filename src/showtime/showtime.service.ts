@@ -213,4 +213,36 @@ export class ShowtimeService {
   return availableSeats;
 }
 
+async getOccupiedSeatsByShowtimeId(showtimeId: string): Promise<Seat[][]> {
+  if (!Types.ObjectId.isValid(showtimeId)) {
+    throw new NotFoundException('ID de función inválido');
+  }
+
+  const showtime = await this.showtimeModel.findById(showtimeId).exec();
+
+  if (!showtime) {
+    throw new NotFoundException('Función no encontrada');
+  }
+
+  const room = await this.roomService.findById(showtime.room.toString());
+
+  if (!room) {
+    throw new NotFoundException('Sala asociada no encontrada');
+  }
+
+  // Filtrar solo los asientos ocupados
+  const occupiedSeats: Seat[][] = room.seats.map((row) =>
+    row
+      .filter((seat) => seat.occupied)
+      .map((seat) => ({
+        row: seat.row,
+        column: seat.column,
+        occupied: seat.occupied,
+      }))
+  );
+
+  return occupiedSeats;
+}
+
+
 }

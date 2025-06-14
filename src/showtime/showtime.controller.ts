@@ -44,4 +44,9 @@ export class ShowtimeController {
     return this.showtimeService.getAvailableSeatsByShowtimeId(id);
 }
 
+  @Get(':id/occupied-seats')
+  async getOccupiedSeats(@Param('id') showtimeId: string) {
+  return this.showtimeService.getOccupiedSeatsByShowtimeId(showtimeId);
+}
+
 }
